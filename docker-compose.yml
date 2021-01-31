@@ -4,7 +4,7 @@ services:
   traefik:
     container_name: traefik
     restart: unless-stopped
-    image: traefik:v2.0
+    image: traefik
     ports:
     - "80:80"
     - "9090:8080"
@@ -18,7 +18,7 @@ services:
     - "traefik.http.routers.api.entrypoints=http"
     - "traefik.http.routers.api.middlewares=auth"
     - "traefik.http.middlewares.auth.basicauth.users=admin:$$apr1$$g.pDYalG$$vOgjGK6QbWmRmWSKLSH5E1"
-    
+
   jenkins:
     container_name: jenkins
     restart: unless-stopped
