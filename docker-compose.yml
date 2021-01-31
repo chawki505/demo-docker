@@ -1,0 +1,76 @@
+version: '3'
+
+services:
+  traefik:
+    container_name: traefik
+    restart: unless-stopped
+    image: traefik:v2.0
+    ports:
+    - "80:80"
+    - "9090:8080"
+    - "443:443"
+    volumes:
+    - "$PWD/traefik.toml:/etc/traefik/traefik.toml"
+    - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+    - "traefik.http.routers.api.rule=Host(`traefik.localhost`)"
+    - "traefik.http.routers.api.service=api@internal"
+    - "traefik.http.routers.api.entrypoints=http"
+    - "traefik.http.routers.api.middlewares=auth"
+    - "traefik.http.middlewares.auth.basicauth.users=admin:$$apr1$$g.pDYalG$$vOgjGK6QbWmRmWSKLSH5E1"
+    
+  jenkins:
+    container_name: jenkins
+    restart: unless-stopped
+    image: treeptik/jenkins
+    volumes:
+    - /usr/bin/docker:/usr/bin/docker
+    - /var/run/docker.sock:/var/run/docker.sock
+    - jenkins-home:/var/jenkins_home
+    - /mnt/btrfs:/mnt/btrfs
+    privileged: true
+    environment:
+    - "TZ=Europe/Paris"
+    - "JAVA_ARGS=-Xmx1024m -XX:MaxPermSize=512m -Djava.awt.headless=true"
+    labels:
+    - "traefik.enable=true"
+    - "traefik.http.routers.jenkins.rule=Host(`jenkins.localhost`)"
+    - "traefik.http.routers.jenkins.entrypoints=http"
+    - "traefik.http.services.jenkins.loadbalancer.server.port=8080"
+
+  gitlab:
+    container_name: gitlab
+    image: gitlab/gitlab-ce:10.2.1-ce.0
+    restart: unless-stopped
+    volumes:
+    - gitlab-conf:/etc/gitlab
+    - gitlab-log:/var/log/gitlab
+    - gitlab-data:/var/opt/gitlab
+    labels:
+    - "traefik.enable=true"
+    - "traefik.http.routers.gitlab.rule=Host(`gitlab.localhost`)"
+    - "traefik.http.routers.gitlab.entrypoints=http"
+    - "traefik.http.services.gitlab.loadbalancer.server.port=80"
+
+  portainer:
+    container_name: portainer
+    image: portainer/portainer
+    restart: unless-stopped
+    volumes:
+    - "/var/run/docker.sock:/var/run/docker.sock"
+    labels:
+    - "traefik.enable=true"
+    - "traefik.http.routers.portainer.rule=Host(`portainer.localhost`)"
+    - "traefik.http.routers.portainer.entrypoints=http"
+    - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+
+volumes:
+  jenkins-home:
+  gitlab-conf:
+  gitlab-data:
+  gitlab-log:
+
+networks:
+  default:
+    external:
+      name: skynet
