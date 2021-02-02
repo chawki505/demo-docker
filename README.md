@@ -12,11 +12,11 @@
 $ sudo apt-get update
 
 $ sudo apt-get install \
-    apt-transport-https \
-    ca-certificates \
-    curl \
-    gnupg-agent \
-    software-properties-common
+	apt-transport-https \
+	ca-certificates \
+	curl \
+	gnupg-agent \
+	software-properties-common
 
 $ curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
 
@@ -142,8 +142,8 @@ $ docker run --name postgres-srv \
 $ docker exec -it postgres-srv bash
 
 container> psql -U postgres
-    postgres> \timing
-    postgres> \i /opt/scripts/users.sql
+ postgres> \timing
+ postgres> \i /opt/scripts/users.sql
 ```
 
 ## Création du volume BtrFS

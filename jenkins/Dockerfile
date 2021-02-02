@@ -3,11 +3,11 @@ FROM jenkins/jenkins
 USER root
 
 RUN apt-get update \
-        && apt-get install --no-install-recommends --no-install-suggests -y \
-        ca-certificates \
-        software-properties-common \
-        vim \
-        btrfs-tools
+				&& apt-get install --no-install-recommends --no-install-suggests -y \
+				ca-certificates \
+				software-properties-common \
+				vim \
+				btrfs-tools
 
 RUN apt-get update && apt-get install -y libltdl7 && rm -rf /var/lib/apt/lists/*
 
