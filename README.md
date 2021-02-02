@@ -6,24 +6,24 @@
 
 - source : https://docs.docker.com/engine/install/
 
-#### Configurer repository
+#### Configurer le repository
 
 ```bash
 $ sudo apt-get update
 
 $ sudo apt-get install \
-	apt-transport-https \
-	ca-certificates \
-	curl \
-	gnupg-agent \
-	software-properties-common
+ apt-transport-https \
+ ca-certificates \
+ curl \
+ gnupg-agent \
+ software-properties-common
 
 $ curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
 
 $ sudo add-apt-repository \
-   "deb [arch=amd64] https://download.docker.com/linux/debian \
-   $(lsb_release -cs) \
-   stable"
+  "deb [arch=amd64] https://download.docker.com/linux/debian \
+  $(lsb_release -cs) \
+  stable"
 ```
 
 #### Installer docker engine
@@ -46,7 +46,6 @@ $ sudo chmod g+rwx "$HOME/.docker" -R
 $ docker --version
 Docker version 20.10.2, build 2291f61
 ```
-
 
 ### Docker-Compose
 
@@ -82,6 +81,7 @@ $ sudo mkfs.btrfs -f /dev/disk/by-id/VOTRE_VOLUME_SECONDAIRE
 ```
 
 ## Montage temporaire du volume
+
 ```bash
 $ sudo mkdir /mnt/btrfs
 $ sudo mount -o defaults,discard /dev/disk/by-id/VOTRE_VOLUME_SECONDAIRE /mnt/btrfs/
@@ -96,10 +96,11 @@ $ cat /mnt/btrfs/test
 $ rm -f /mnt/btrfs/test
 ```
 
-## Clonage du projet
+## Clonage des projets
 
 ```bash
 $ git clone https://github.com/chawki505/demo-docker
+$ git clone https://github.com/chawki505/demo-docker-app
 ```
 
 ## Construire les images Jenkins avec support BtrFS
@@ -134,10 +135,10 @@ $ mkdir /mnt/btrfs/pg-data-ref
 
 ```bash
 $ docker run --name postgres-srv \
-   -e POSTGRES_PASSWORD=mysecretpassword \
-   -v /mnt/btrfs/pg-data:/var/lib/postgresql/data \
-   -v `pwd`/scripts/users.sql:/opt/scripts/users.sql \
-   -d postgres
+	 -e POSTGRES_PASSWORD=mysecretpassword \
+	 -v /mnt/btrfs/pg-data:/var/lib/postgresql/data \
+	 -v `pwd`/scripts/users.sql:/opt/scripts/users.sql \
+	 -d postgres
 
 $ docker exec -it postgres-srv bash
 
@@ -152,3 +153,5 @@ container> psql -U postgres
 btrfs subvolume create /mnt/btrfs/pg-data-ref
 sudo chown -R jenkins:jenkins /mnt/btrfs/pg-data-ref/
 ```
+
+source : <https://github.com/Treeptik/devoxx2018>
