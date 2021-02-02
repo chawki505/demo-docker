@@ -150,8 +150,8 @@ container> psql -U postgres
 ## Création du volume BtrFS
 
 ```bash
-btrfs subvolume create /mnt/btrfs/pg-data-ref
-sudo chown -R jenkins:jenkins /mnt/btrfs/pg-data-ref/
+$ btrfs subvolume create /mnt/btrfs/pg-data-ref
+$ sudo chown -R jenkins:jenkins /mnt/btrfs/pg-data-ref/
 ```
 
 source : <https://github.com/Treeptik/devoxx2018>
